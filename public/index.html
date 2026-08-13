@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>敖子逸宇宙 · 命定之人</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+
+  <main class="card" id="app">
+    <!-- 开场页 -->
+    <section id="intro" class="screen active">
+      <h1 class="title">敖子逸宇宙</h1>
+      <p class="subtitle">— 你的命定之人是谁 —</p>
+      <p class="intro-text" id="introText"></p>
+      <button class="btn" id="startBtn">进入宇宙 ✦</button>
+    </section>
+
+    <!-- 答题页 -->
+    <section id="quiz" class="screen">
+      <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <span class="progress-num" id="progressNum"></span>
+      </div>
+      <h2 class="q-text" id="qText"></h2>
+      <div class="options" id="options"></div>
+    </section>
+
+    <!-- 结果页 -->
+    <section id="result" class="screen">
+      <p class="result-kicker">万千世界，因逸结缘</p>
+      <h2 class="result-title">你的命定之人是</h2>
+      <h1 class="result-name" id="resultName"></h1>
+      <p class="result-work" id="resultWork"></p>
+      <div class="compat-ring">
+        <span id="compatNum">0</span><small>%</small>
+        <p class="compat-label">适配度</p>
+      </div>
+      <p class="persona" id="persona"></p>
+      <div class="labels" id="labels"></div>
+      <button class="btn" id="retryBtn">再测一次 ✦</button>
+      <p class="stats" id="stats"></p>
+    </section>
+  </main>
+
+  <script src="characters.js"></script>
+  <script src="quiz-config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

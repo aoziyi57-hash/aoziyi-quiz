@@ -1,0 +1,12 @@
+{
+  "name": "aoziyi-universe-quiz",
+  "version": "1.0.0",
+  "description": "敖子逸宇宙 · 命定之人 测试（娱乐社交型 + 匿名统计）",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
