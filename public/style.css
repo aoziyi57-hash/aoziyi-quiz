@@ -123,6 +123,7 @@ body {
   font-size: 40px; color: #fff; font-weight: 700;
 }
 .compat-ring small { font-size: 18px; color: var(--pink-soft); }
+.compat-value { display: flex; align-items: baseline; gap: 2px; line-height: 1; }
 .compat-label { font-size: 13px !important; color: var(--pink-soft) !important; margin: 2px 0 0; font-weight: 400; }
 
 .persona { line-height: 1.7; font-size: 15px; margin-bottom: 18px; color: var(--text); }
