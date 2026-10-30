@@ -76,9 +76,43 @@
 
   function computeResult() {
     var userVec = buildUserVec();
-    var ranked = CHARACTERS.map(function (c) {
+    // 收集第1题等带 lockOut 的硬性排除（如：朝堂锁池云 / 江湖锁乔慈）
+    var lockedOut = {};
+    answers.forEach(function (optId, i) {
+      var q = QUESTIONS[i];
+      var o = q.options.find(function (x) { return x.id === optId; });
+      if (o && o.lockOut) o.lockOut.forEach(function (id) { lockedOut[id] = true; });
+    });
+    // 标签优先：先找命中了「专属触发标签」的角色，只在它们之中比适配度；
+    // 若谁都没命中，则退回全部角色（兜底）。
+    var hitChars = CHARACTERS.filter(function (c) {
+      return c.labels.some(function (l) { return evalCond(l.cond, userVec); });
+    });
+    var basePool = hitChars.length ? hitChars : CHARACTERS;
+
+    // 彩蛋角色需「命中全部专属标签」才候选（压低其概率，避免霸榜）
+    var EGG_IDS = { sangzhan: 1, mile: 1, jiangmo: 1, luze: 1, shangguanyu: 1, penghezhou: 1 };
+    var pool = basePool.filter(function (c) {
+      if (lockedOut[c.id]) return false;
+      if (EGG_IDS[c.id]) {
+        var eggHit = c.labels.filter(function (l) { return evalCond(l.cond, userVec); }).length;
+        return eggHit >= c.labels.length;
+      }
+      return true;
+    });
+    // 兜底：若候选池为空（如命中的全是仅命中 1 个标签的彩蛋），退回全体非锁定角色
+    if (!pool.length) pool = CHARACTERS.filter(function (c) { return !lockedOut[c.id]; });
+
+    // 软权重：在「紧标签已收敛的候选集」内做加减偏移，微调各角色胜出概率
+    // （正数更易胜出、负数更易落败），仅用于平衡分布，不改变候选资格。
+    var WEIGHTS = {
+      chiyun: 15, chenmuguang: 12, aoyi: -12, yangyishan: -12, qiaoci: -4,
+      mahongjun: 4, sufan: 12, penghezhou: 15, sangzhan: -18, mile: 12,
+      jiangmo: 15, luze: -2, shangguanyu: 10
+    };
+    var ranked = pool.map(function (c) {
       var hits = c.labels.filter(function (l) { return evalCond(l.cond, userVec); });
-      return { char: c, compat: compatibility(userVec, c.vec), hits: hits };
+      return { char: c, compat: compatibility(userVec, c.vec) + (WEIGHTS[c.id] || 0), hits: hits };
     }).sort(function (a, b) { return b.compat - a.compat; });
 
     var top = ranked[0];
